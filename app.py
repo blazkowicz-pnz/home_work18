@@ -1,3 +1,49 @@
+from flask import Flask
+from config import Config
+from setup_db import db
+from flask_restx import Api, namespace
+from views.movie import ns_movie
+from views.genre import ns_genre
+from views.director import ns_director
+from dao.model.movie import Movie
+from dao.model.genre import Genre
+from dao.model.director import Director
+
+
+def create_app(config:Config) ->Flask:
+    app = Flask(__name__)
+    app.config.from_object(config)
+    register_extension(app)
+    return app
+
+
+def register_extension(app):
+    db.init_app(app)
+    api = Api(app)
+    api.add_namespace(ns_movie)
+    api.add_namespace(ns_genre)
+    api.add_namespace(ns_director)
+    # load_data(app, db)
+
+
+# def load_data(app, db):
+#     with app.app_context():
+#         m1 = Movie(id=25, title="Mad Monkey", description="cool film", trailer="000", year=1900, rating=3.1, genre_id=3, director_id=3)
+#         g1 = Genre(id=22, name="Спорт")
+#         d1 = Director(id=23, name="Виталик")
+#         with db.session.begin():
+#             db.session.add(m1)
+#             db.session.add(g1)
+#             db.session.add(d1)
+#             db.session.commit()
+
+
+app_config = Config()
+app = create_app(app_config)
+if __name__ == "__main__":
+    app.run()
+
+
 # основной файл приложения. здесь конфигурируется фласк, сервисы, SQLAlchemy и все остальное что требуется для приложения.
 # этот файл часто является точкой входа в приложение
 
