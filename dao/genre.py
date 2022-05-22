@@ -4,6 +4,7 @@ class GenreDAO:
     def __init__(self, session):
         self.session = session
 
+
     def get_one(self, gid):
         return self.session.query(Genre).get(gid)
 

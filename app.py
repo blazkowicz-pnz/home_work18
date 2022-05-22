@@ -1,13 +1,11 @@
 from flask import Flask
 from config import Config
 from setup_db import db
-from flask_restx import Api, namespace
+from flask_restx import Api
 from views.movie import ns_movie
 from views.genre import ns_genre
 from views.director import ns_director
-from dao.model.movie import Movie
-from dao.model.genre import Genre
-from dao.model.director import Director
+
 
 
 def create_app(config:Config) ->Flask:

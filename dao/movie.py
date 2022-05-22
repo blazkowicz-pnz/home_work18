@@ -1,5 +1,5 @@
 from dao.model.movie import Movie
-# from views.movie import director_id, genre_id, year
+
 
 class MovieDAO:
     def __init__(self, session):
@@ -11,28 +11,31 @@ class MovieDAO:
 
 
     def get_all(self):
-        # movies =
-        # if director_id:
-        #     movies = self.session.query(Movie).filter(Movie.director_id == director_id)
         return self.session.query(Movie).all()
 
 
+    def get_by_director(self, director_id):
+        return self.session.query(Movie).filter(Movie.director_id == director_id)
 
+
+    def get_by_genre(self, genre_id):
+        return self.session.query(Movie).filter(Movie.genre_id == genre_id)
+
+
+    def get_by_yaer(self, year):
+        return self.session.query(Movie).filter(Movie.year == year)
 
 
     def create(self, data):
         movie = Movie(**data)
         self.session.add(movie)
         self.session.commit()
-
         return movie
 
 
     def update(self, movie):
-
         self.session.add(movie)
         self.session.commit()
-
         return movie
 
 

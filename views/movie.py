@@ -5,14 +5,21 @@ from container import movie_service
 
 ns_movie = Namespace("movies")
 
-# director_id = request.args.get("director_id", type=int)
-# genre_id = request.args.get("genre_id", type=int)
-# year = request.args.get("year", type=int)
-
 @ns_movie.route("/")
 class MovieView(Resource):
     def get(self):
-        all_movies = movie_service.get_all()
+        director_id = request.args.get("director_id", type=int)
+        genre_id = request.args.get("genre_id", type=int)
+        year = request.args.get("year", type=int)
+
+        if director_id:
+            all_movies = movie_service.get_by_director(director_id)
+        elif genre_id:
+            all_movies = movie_service.get_by_genre(genre_id)
+        elif year:
+            all_movies = movie_service.get_by_year(year)
+        else:
+            all_movies = movie_service.get_all()
         return MovieSchema(many=True).dump(all_movies)
 
 
@@ -34,25 +41,22 @@ class MovieView(Resource):
         req_data = request.json
         req_data["id"] = mid
         movie_service.update(req_data)
-
         return "", 204
 
 
     def patch(self, mid):
         req_data = request.json
         req_data["id"] = mid
-
         movie_service.update_partial(req_data)
-
         return "", 204
+
 
     def delete(self, mid):
         movie_service.delete(mid)
         return "", 204
 
 
-if __name__ == "__main__":
-    application.run(debug=True)
+
 
 
 
